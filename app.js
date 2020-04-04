@@ -6,9 +6,10 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const user = require("./user");
 const serveStatic = require("serve-static");
-require('dotenv').config();
+require("dotenv").config();
 //Loads the handlebars module
 const handlebars = require("express-handlebars");
+const middlewares = require("./middlewares");
 
 require("./setup.js");
 
@@ -121,14 +122,10 @@ app
       });
   });
 
-app.get("/profile", (req, res) => {
-  if (req.session.user && req.cookies.user_sid) {
-    res.render("profile", {
-      user: req.session.user ? req.session.user : null
-    });
-  } else {
-    res.redirect("/login");
-  }
+app.get("/profile", middlewares.authenticate, (req, res) => {
+  return res.render("profile", {
+    user: req.decoded
+  });
 });
 
 app.get("/logout", (req, res) => {

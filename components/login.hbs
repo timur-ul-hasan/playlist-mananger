@@ -1,15 +1,13 @@
-extends layout
-
-block content
-  h1 Login
-  if error
-    h2 !{error}
-  form(action='/login', method='post')
-    div
-      label Username:
-      input(type='text', name='username', required)
-    div
-      label Password:
-      input(type='password', name='password', required)
-    div
-      input(type='submit', value='Login')
+<form action='/login', method='post'>
+  <div class="form-group">
+    <label class="form-label" for="input-example-1">Username</label>
+    <input class="form-input" type="text" id="username"  name="username" placeholder="Name">
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="input-example-1">Password</label>
+    <input class="form-input" type="password" id="password"  name="password" placeholder="Name">
+  </div>
+  <div class="btn-group btn-group-block">
+    <button class="btn btn-primary">Register</button>
+  </div> 
+</form>
