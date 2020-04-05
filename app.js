@@ -14,7 +14,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 require("./setup.js");
-const port = process.env.port || 8080;
+const port = process.env.port || 80;
 
 const sqliteOptions = {
   client: "sqlite3",
@@ -27,8 +27,8 @@ const knex = require("knex")(sqliteOptions);
 
 const KnexSessionStore = require("connect-session-knex")(session);
 const store = new KnexSessionStore({
-  knex,
-}); 
+  knex
+});
 
 app.locals.knex = knex;
 
@@ -79,13 +79,13 @@ app.post("/uploadfile", upload.single("myFile"), (req, res, next) => {
 
 /* Global Middleware to conditional render stuff in views. */
 app.use((req, res, next) => {
-  console.log(req.session.user,req.cookies);
+  console.log(req.session.user, req.cookies);
   if (req.cookies.user_sid && req.session.user) {
     res.locals.authenticated = true;
     res.locals.user = req.session.user;
   } else {
     res.locals.authenticated = false;
-    res.clearCookie('user_sid');
+    res.clearCookie("user_sid");
   }
   next();
 });
@@ -120,16 +120,17 @@ app.get("/logout", userController.logout);
 app.get("/playlists", playlistsController.listAllPlaylist);
 app
   .route("/add-playlist")
-  .get(middlewares.authenticate,playlistsController.addPlaylistPage)
-  .post(middlewares.authenticate,playlistsController.createPlaylist);
+  .get(middlewares.authenticate, playlistsController.addPlaylistPage)
+  .post(middlewares.authenticate, playlistsController.createPlaylist);
 
-app.route("/playlist/:playlistId").get(middlewares.authenticate,playlistsController.playListPage);
+app
+  .route("/playlist/:playlistId")
+  .get(middlewares.authenticate, playlistsController.playListPage);
 
 app.route("/add-song").post(upload.single("song"), playlistsController.addSong);
 
-
 /* Accounts routes */
-app.get("/accounts",userController.accountPage);
+app.get("/accounts", userController.accountPage);
 
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
