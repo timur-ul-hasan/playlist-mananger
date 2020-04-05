@@ -1,23 +1,20 @@
 const express = require("express");
 const path = require("path");
-const app = express();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const user = require("./user");
 const serveStatic = require("serve-static");
-require("dotenv").config();
-//Loads the handlebars module
 const handlebars = require("express-handlebars");
 const middlewares = require("./middlewares");
-
+const app = express();
+require("dotenv").config();
 require("./setup.js");
 
 const port = 8080;
 app.set("port", port);
 app.set("view engine", "handlebars");
 app.set("views", `${__dirname}/components`);
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
