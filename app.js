@@ -30,7 +30,6 @@ app.use(
 );
 
 app.use(serveStatic(path.join(__dirname, "public")));
-
 //Sets our app to use the handlebars engine
 app.engine(
   ".hbs",
@@ -43,72 +42,18 @@ app.engine(
 );
 app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go through them later on)
 
-app.get("/", (req, res) => {
-  return res.render("index", {
-    user: req.session.user ? req.session.user : null,
-    intro:
-      "Welcome to ACME Inc., please login to view our employees. If you do not have an account, please register for one."
-  });
-});
+app.get("/", userController.homePage);
 
 app
   .route("/register")
-  .get(middlewares.checkSession, (req, res) => {
-    res.render("register");
-  })
-  .post((req, res) => {
-    user
-      .insertUser(req.body.username, req.body.password)
-      .then(user => {
-        if (user) {
-          req.session.user = user[0];
-          return res.redirect("/profile");
-        } else {
-          return res.render("register", {
-            error: "User already registered."
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        return res.redirect("/register");
-      });
-  });
-
+  .get(middlewares.checkSession,userController.registerPage)
+  .post(userController.register);
 app
   .route("/login")
-  .get(middlewares.checkSession, (req, res) => {
-    res.render("login");
-  })
-  .post((req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    user
-      .checkUser(username, password)
-      .then(response => {
-        if (response) {
-          req.session.user = response;
-          const token = user.createToken(response.username);
-          res.cookie("jwt", token);
-          return res.redirect("/profile");
-        } else {
-          return res.render("login", {
-            error:
-              'Incorrect login details. Maybe try to <a href="/register">Register</a>.'
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        return res.redirect("/register");
-      });
-  });
+  .get(middlewares.checkSession, userController.loginPage)
+  .post(userController.login);
 
-app.get("/profile", middlewares.authenticate, (req, res) => {
-  return res.render("profile", {
-    user: req.decoded
-  });
-});
+app.get("/profile", middlewares.authenticate, userController.profilePage);
 
 app.get("/logout", userController.logout);
 
