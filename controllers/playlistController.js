@@ -18,10 +18,17 @@ function addPlaylistPage(req, res) {
 
 function playListPage(req, res) {
   const { playlistId } = req.params;
-
-  res.render("playlist", {
-    playlistId
-  });
+  const { knex } = req.app.locals;
+  knex
+    .select("*")
+    .from("songs")
+    .where("playlist_id", playlistId)
+    .then(songs => {
+      return res.render("playlist", {
+        songs,
+        playlistId
+      });
+    });
 }
 
 function addSong(req, res, next) {

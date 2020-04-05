@@ -1,19 +1,26 @@
 <main>
     <ul class="people_list">
-        <form action="/add-song"  enctype="multipart/form-data" method="POST">
-        <fieldset >
+        {{#each songs}}
+        <li>
+          <audio controls>
+          <source src="/{{this.url}}" type="audio/mp3">
+        </audio>
+        </li>
+        {{/each}}
+    </ul>
+    <form action="/add-song" enctype="multipart/form-data" method="POST">
+        <fieldset>
             <input type="hidden" name="playlistId" value="{{playlistId}}">
             <div class="form-group">
                 <label class="form-label" for="input-example-19">Name</label>
                 <input class="form-input" type="text" id="input-example-19" placeholder="Name" name="name">
             </div>
             <div class="form-group">
-              <input type="file" name="song" />
+                <input type="file" name="song" />
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <button class="btn btn-primary">Add Song</button>
             </div>
         </fieldset>
     </form>
-    </ul>
 </main>
