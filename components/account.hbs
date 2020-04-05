@@ -1,11 +1,24 @@
 <main>
-    <ul class="people_list">
-        {{#each users}}
-        <li>
-            <span>
-                <a href="/playlist/{{this.id}}">{{this.name}}</a>
-            </span>
-        </li>
+  <h3>Accounts</h3>
+  <table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+       {{#each users}}
+        <tr class="active">
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>
+                <a href="account/{{this.id}}">View</a>
+                </td>
+        </tr>
         {{/each}}
     </ul>
+  </tbody>
+</table>
 </main>
