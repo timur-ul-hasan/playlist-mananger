@@ -122,6 +122,10 @@ app.get("/profile", middlewares.authenticate, userController.profilePage);
 app.get("/logout", userController.logout);
 
 app.get("/playlists", playlistsController.listAllPlaylist);
+app
+  .route("/add-playlist")
+  .get(playlistsController.addPlaylistPage)
+  .post(playlistsController.createPlaylist);
 
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
