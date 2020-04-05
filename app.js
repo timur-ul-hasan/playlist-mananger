@@ -7,6 +7,7 @@ const user = require("./user");
 const serveStatic = require("serve-static");
 const handlebars = require("express-handlebars");
 const middlewares = require("./middlewares");
+const userController = require("./controllers/userController");
 const app = express();
 require("dotenv").config();
 require("./setup.js");
@@ -41,22 +42,6 @@ app.engine(
   })
 );
 app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go through them later on)
-
-app.use((req, res, next) => {
-  if (req.cookies.user_sid && !req.session.user) {
-    res.clearCookie("user_sid");
-    res.clearCookie("jwt");
-  }
-  next();
-});
-
-// const middlewares.checkSession = (req, res, next) => {
-//   if (req.session.user && req.cookies.user_sid) {
-//     res.redirect("/profile");
-//   } else {
-//     next();
-//   }
-// };
 
 app.get("/", (req, res) => {
   return res.render("index", {
@@ -125,55 +110,9 @@ app.get("/profile", middlewares.authenticate, (req, res) => {
   });
 });
 
-app.get("/logout", (req, res) => {
-  if (req.session.user && req.cookies.user_sid) {
-    res.clearCookie("user_sid");
-    res.clearCookie("jwt");
-    res.redirect("/");
-  } else {
-    res.redirect("/");
-  }
-});
+app.get("/logout", userController.logout);
 
-app.use((req, res, next) => {
-  res.set("Content-Type", "text/plain");
-  // courtesy of https://www.asciiart.eu/movies/star-wars
-  res.status(404).send(`
-
-  404 - This is not the page you are looking for
-                    ____
-                 _.' :  \`._
-             .-.'\`.  ;   .'\`.-.
-    __      / : ___\ ;  /___ ; \      __
-  ,'_ ""--.:__;".-.";: :".-.":__;.--"" _\`,
-  :' \`.t""--.. '<@.\`;_  ',@>\` ..--""j.' \`;
-       \`:-.._J '-.-'L__ \`-- ' L_..-;'
-         "-.__ ;  .-"  "-.  : __.-"
-             L ' /.------.\ ' J
-              "-.   "--"   .-"
-             __.l"-:_JL_;-";.__
-          .-j/'.;  ;""""  / .'\"-.
-        .' /:\`. "-.:     .-" .';  \`.
-     .-"  / ;  "-. "-..-" .-"  :    "-.
-  .+"-.  : :      "-.__.-"      ;-._   \
-  ; \  \`.; ;                    : : "+. ;
-  :  ;   ; ;                    : ;  : \:
- : \`."-; ;  ;                  :  ;   ,/;
-  ;    -: ;  :                ;  : .-"'  :
-  :\     \  : ;             : \.-"      :
-   ;\`.    \  ; :            ;.'_..--  / ;
-   :  "-.  "-:  ;          :/."      .'  :
-     \       .-\`.\        /t-""  ":-+.   :
-      \`.  .-"    \`l    __/ /\`. :  ; ; \  ;
-        \   .-" .-"-.-"  .' .'j \  /   ;/
-         \ / .-"   /.     .'.' ;_:'    ;
-          :-""-.\`./-.'     /    \`.___.'
-                \ \`t  ._  / 
-                 "-.t-._:'
-
-  `);
-});
-
+app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
   console.log(`Server running on ${app.get("port")}`)
 );
