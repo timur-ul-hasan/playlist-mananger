@@ -71,6 +71,14 @@ const profilePage = (req, res) => {
   });
 }
 
+
+const accountPage = (req, res) => {
+  return res.render("accounts", {
+    user: req.decoded
+  });
+}
+
+
 module.exports = {
   homePage,
   logout,

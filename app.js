@@ -10,7 +10,7 @@ const middlewares = require("./middlewares");
 const userController = require("./controllers/userController");
 const playlistsController = require("./controllers/playlistController");
 const app = express();
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 require("./setup.js");

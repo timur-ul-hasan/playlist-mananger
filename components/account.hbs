@@ -1,0 +1,12 @@
+<main>
+    <ul class="people_list">
+        {{#each accounts}}
+        <li>
+            <span>
+                <a href="/playlist/{{this.id}}">{{this.name}}</a>
+            </span>
+        </li>
+        {{/each}}
+    </ul>
+    <a href="/add-playlist">Add Playlist</a>
+</main>
