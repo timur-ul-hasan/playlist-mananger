@@ -16,13 +16,20 @@ require("dotenv").config();
 require("./setup.js");
 const port = process.env.port || 8080;
 
-const knex = require("knex")({
+const sqliteOptions = {
   client: "sqlite3",
   connection: {
     filename: "./dev.sqlite3"
   },
   useNullAsDefault: true
-});
+};
+const knex = require("knex")(sqliteOptions);
+
+const KnexSessionStore = require("connect-session-knex")(session);
+const store = new KnexSessionStore({
+  knex,
+}); 
+
 app.locals.knex = knex;
 
 app.set("port", port);
@@ -38,7 +45,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       expires: 1000 * 60 * 60 * 24 * 7
-    }
+    },
+    store
   })
 );
 
