@@ -1,9 +1,9 @@
 <div class="register-wrapper">
     <form action='/login' , method='post'>
-        {{#if authenticated}}
-        <div class="toast">
-            <p>{{{error}}}</p>
-        </div>
+        {{#if error}}
+          <div class="toast">
+              <p>{{{error}}}</p>
+          </div>
         {{/if}}
         <div class="form-group">
             <label class="form-label" for="input-example-1">Username</label>

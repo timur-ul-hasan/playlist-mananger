@@ -8,44 +8,68 @@
     <link rel="stylesheet" href="/dist/spectre-icons.min.css">
     <style>
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        padding: 0;
     }
  
     .register-wrapper {
-        min-width : 400px;
-        max-width: 400px;
-        margin:0 auto;
+        width : 400px;
+        margin: auto;
     }
     .navbar {
         height:70px;
     }
     footer {
-        height: 50px;
         text-align: center;
         margin-top: auto;
+    }
+    footer p{
+       margin : 10px
     }
     .add-button-wrapper{
         margin: 20px 0;
         justify-content: flex-end;
     }
     .btn-group.btn-group-block {
-            margin: 30px 0;
+        margin: 30px 0;
     }
     main {
       padding : 10px;
+    }
+    .section-wrapper {
+        min-width: 1200px;
+         padding: 0 calc((100vw - 1200px)/2);
+    }
+
+    .section-wrapper.navigation {
+        background-color: #333;
+    }
+    .section-wrapper.navigation .btn.btn-link{
+        color: #eee;
+    }
+
+    .section-wrapper:last-child {
+         margin-top: auto;
+        
+    }
+     .section-wrapper.footer {
+        background-color: #f2f2f2;
+    }
+    .section-wrapper.main-section{
+        display: flex;
+        flex-direction: column;
+        min-height: calc(80vh - (70px + 50px));
     }
     </style>
 </head>
 
 <body>
     <div class="container">
-        {{> navigation}}
-        {{{body}}}
-        {{> footer}}
+        <div class="section-wrapper navigation">{{> navigation}}</div>
+        <div class="section-wrapper main-section">{{{body}}} </div>
+        <div class="section-wrapper footer">{{> footer}}</div>
     </div>
 </body>
 </html>
