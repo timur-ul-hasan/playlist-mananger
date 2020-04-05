@@ -10,8 +10,7 @@ const middlewares = require("./middlewares");
 const app = express();
 require("dotenv").config();
 require("./setup.js");
-
-const port = 8080;
+const port = process.env.port || 8080;
 app.set("port", port);
 app.set("view engine", "handlebars");
 app.set("views", `${__dirname}/components`);
@@ -51,13 +50,13 @@ app.use((req, res, next) => {
   next();
 });
 
-const checkSession = (req, res, next) => {
-  if (req.session.user && req.cookies.user_sid) {
-    res.redirect("/profile");
-  } else {
-    next();
-  }
-};
+// const middlewares.checkSession = (req, res, next) => {
+//   if (req.session.user && req.cookies.user_sid) {
+//     res.redirect("/profile");
+//   } else {
+//     next();
+//   }
+// };
 
 app.get("/", (req, res) => {
   return res.render("index", {
@@ -69,7 +68,7 @@ app.get("/", (req, res) => {
 
 app
   .route("/register")
-  .get(checkSession, (req, res) => {
+  .get(middlewares.checkSession, (req, res) => {
     res.render("register");
   })
   .post((req, res) => {
@@ -93,7 +92,7 @@ app
 
 app
   .route("/login")
-  .get(checkSession, (req, res) => {
+  .get(middlewares.checkSession, (req, res) => {
     res.render("login");
   })
   .post((req, res) => {
