@@ -40,7 +40,8 @@ app.engine(
   handlebars({
     layoutsDir: `${__dirname}/components`,
     extname: ".hbs",
-    defaultLayout: "layout"
+    defaultLayout: "layout",
+    partialsDir: `${__dirname}/components/partials`
   })
 );
 app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go through them later on)

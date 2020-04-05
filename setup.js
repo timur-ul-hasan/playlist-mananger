@@ -1,20 +1,57 @@
-const knex = require('knex')({
-  client: 'sqlite3',
+const knex = require("knex")({
+  client: "sqlite3",
   connection: {
-    filename: './dev.sqlite3'
+    filename: "./dev.sqlite3"
   },
   useNullAsDefault: true
 });
 
+knex.schema
+  .hasTable("users")
+  .then(exists => {
+    if (!exists) {
+      return knex.schema
+        .createTable("users", table => {
+          table.increments("id");
+          table.string("Name");
+          table.string("username");
+          table.string("password");
+        })
+        .then(() => console.info("Users table created"))
+        .catch(error => console.error(error));
+    }
+  })
+  .catch(error => console.error(error));
 
-knex.schema.hasTable('users').then(exists => {
-  if (!exists) {
-    return knex.schema.createTable('users', table => {
-      table.increments('id')
-      table.string('username')
-      table.string('password')
-    })
-    .then(() => console.info('Users table created'))
-    .catch(error => console.error(error));
-  } 
-}).catch(error => console.error(error));
+knex.schema
+  .hasTable("playlists")
+  .then(exists => {
+    if (!exists) {
+      return knex.schema
+        .createTable("playlists", table => {
+          table.increments("id");
+          table.string("Name");
+          table.string("user_id");
+          table.string("status");
+        })
+        .then(() => console.info("Users table created"))
+        .catch(error => console.error(error));
+    }
+  })
+  .catch(error => console.error(error));
+
+knex.schema
+  .hasTable("songs")
+  .then(exists => {
+    if (!exists) {
+      return knex.schema
+        .createTable("songs", table => {
+          table.increments("id");
+          table.string("Name");
+          table.string("url");
+        })
+        .then(() => console.info("Songs table created"))
+        .catch(error => console.error(error));
+    }
+  })
+  .catch(error => console.error(error));
