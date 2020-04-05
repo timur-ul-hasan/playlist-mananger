@@ -73,9 +73,15 @@ const profilePage = (req, res) => {
 
 
 const accountPage = (req, res) => {
-  return res.render("accounts", {
-    user: req.decoded
-  });
+  const { knex } = req.app.locals;
+  knex
+    .select("id","username","name")
+    .from("users")
+    .then(users => {
+      return res.render("account", {
+        users
+      });
+    });
 }
 
 
@@ -86,5 +92,6 @@ module.exports = {
   register,
   loginPage,
   login,
-  profilePage
+  profilePage,
+  accountPage
 };

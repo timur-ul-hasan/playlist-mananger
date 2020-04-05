@@ -1,6 +1,6 @@
 <main>
     <ul class="people_list">
-        {{#each accounts}}
+        {{#each users}}
         <li>
             <span>
                 <a href="/playlist/{{this.id}}">{{this.name}}</a>
@@ -8,5 +8,4 @@
         </li>
         {{/each}}
     </ul>
-    <a href="/add-playlist">Add Playlist</a>
 </main>
