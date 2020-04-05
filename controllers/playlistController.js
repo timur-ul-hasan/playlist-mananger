@@ -1,3 +1,17 @@
+function listAllPlaylist(req, res) {
+  const { knex } = req.app.locals;
+  knex
+    .select("*")
+    .from("playlists")
+    .then(playlists => {
+      console.log(playlists);
+
+      return res.render("playlists", {
+        playlists
+      });
+    });
+}
+
 function listAllEmployees(req, res) {
   const { knex } = req.app.locals;
   const { orderBy } = req.query;
@@ -92,6 +106,15 @@ function createEmployee(req, res) {
   }
 }
 
+function createPlaylist(req, res) {
+  const { knex } = req.app.locals;
+  const payload = req.body;
+  knex("playlists")
+    .insert(payload)
+    .then(response => res.status(201).json("Playlist created"))
+    .catch(error => res.status(500).json(error));
+}
+
 function updateEmployee(req, res) {
   const { knex } = req.app.locals;
   const { id } = req.params;
@@ -128,5 +151,7 @@ module.exports = {
   listOneEmployee,
   createEmployee,
   updateEmployee,
-  deleteEmployee
+  deleteEmployee,
+  listAllPlaylist,
+  createPlaylist
 };
