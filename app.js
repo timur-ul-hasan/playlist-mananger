@@ -9,6 +9,7 @@ const handlebars = require("express-handlebars");
 const middlewares = require("./middlewares");
 const userController = require("./controllers/userController");
 const app = express();
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 require("./setup.js");
 const port = process.env.port || 8080;
@@ -28,6 +29,25 @@ app.use(
     }
   })
 );
+/* Global Middleware to conditional render stuff in views. */
+app.use((req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, "s3cr3t", (error, decodedToken) => {
+      if (error) {
+        res.locals.authenticated = false;
+        next();
+      } else {
+        res.locals.authenticated = true;
+        next();
+      }
+    });
+  } else {
+    res.locals.authenticated = false;
+    next();
+  }
+});
+
 
 app.use(serveStatic(path.join(__dirname, "public")));
 //Sets our app to use the handlebars engine
@@ -37,7 +57,7 @@ app.engine(
     layoutsDir: `${__dirname}/components`,
     extname: ".hbs",
     defaultLayout: "layout",
-    partialsDir: `${__dirname}/components/partials`
+    partialsDir: `${__dirname}/components/partials`,
   })
 );
 app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go through them later on)
