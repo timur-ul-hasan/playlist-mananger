@@ -22,10 +22,14 @@
     "spectre.css": "^0.5.8",
     "sqlite3": "^4.1.1"
   },
+  "engines": {
+    "node": "12.14.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./app.js"
+    "dev": "nodemon ./index.js",
+    "start": "NODE_ENV=production node index.js"
   },
   "keywords": [],
   "author": "",
