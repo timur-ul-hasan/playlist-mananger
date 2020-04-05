@@ -46,7 +46,7 @@ function addSong(req, res, next) {
       url: file.path.substring(7)
     })
     .then(song => {
-      res.send(song);
+      return res.redirect(`playlist/${playlist_id}`);
     });
 }
 
