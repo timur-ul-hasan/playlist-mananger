@@ -103,11 +103,6 @@ app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go thr
 
 app.get("/", userController.homePage);
 
-app.post("/add-song", upload.single("song"), function(req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-});
-
 app
   .route("/register")
   .get(middlewares.checkSession, userController.registerPage)
@@ -128,6 +123,8 @@ app
   .post(playlistsController.createPlaylist);
 
 app.route("/playlist/:playlistId").get(playlistsController.playListPage);
+
+app.route("/add-song").post(upload.single("song"), playlistsController.addSong);
 
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>

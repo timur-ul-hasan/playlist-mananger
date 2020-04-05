@@ -13,7 +13,7 @@ knex.schema
       return knex.schema
         .createTable("users", table => {
           table.increments("id");
-          table.string("Name");
+          table.string("name");
           table.string("username");
           table.string("password");
         })
@@ -30,7 +30,7 @@ knex.schema
       return knex.schema
         .createTable("playlists", table => {
           table.increments("id");
-          table.string("Name");
+          table.string("name");
           table.string("user_id");
           table.string("status");
         })
@@ -47,7 +47,8 @@ knex.schema
       return knex.schema
         .createTable("songs", table => {
           table.increments("id");
-          table.string("Name");
+          table.integer("playlist_id");
+          table.string("name");
           table.string("url");
         })
         .then(() => console.info("Songs table created"))

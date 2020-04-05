@@ -19,7 +19,28 @@ function addPlaylistPage(req, res) {
 function playListPage(req, res) {
   const { playlistId } = req.params;
 
-  res.render("playlist", {});
+  res.render("playlist", {
+    playlistId
+  });
+}
+
+function addSong(req, res, next) {
+  const { knex } = req.app.locals;
+  const file = req.file;
+  if (!file) {
+    const error = new Error("Please upload a file");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  knex("songs")
+    .insert({
+      name: req.body.name,
+      playlist_id: req.body.playlistId,
+      url: file.path.substring(7)
+    })
+    .then(song => {
+      res.send(song);
+    });
 }
 
 function addPlaylist(req, res) {
@@ -39,5 +60,6 @@ module.exports = {
   listAllPlaylist,
   createPlaylist,
   addPlaylistPage,
-  playListPage
+  playListPage,
+  addSong
 };
