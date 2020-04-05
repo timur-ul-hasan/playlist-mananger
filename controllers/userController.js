@@ -8,21 +8,20 @@ const homePage = (req, res) => {
   });
 };
 
-
 const logout = (req, res) => {
   req.session.destroy(function(err) {
     res.clearCookie("jwt");
     res.redirect("/");
-  })
+  });
 };
 
 const registerPage = (req, res) => {
   res.render("register");
-}
+};
 
 const register = (req, res) => {
   user
-    .insertUser(req.body.name,req.body.username, req.body.password)
+    .insertUser(req.body.name, req.body.username, req.body.password)
     .then(response => {
       if (response) {
         req.session.user = response[0];
@@ -37,11 +36,11 @@ const register = (req, res) => {
       console.log(error);
       return res.redirect("/register");
     });
-}
+};
 
 const loginPage = (req, res) => {
   res.render("login");
-}
+};
 
 const login = (req, res) => {
   const username = req.body.username;
@@ -63,28 +62,33 @@ const login = (req, res) => {
       console.log(error);
       return res.redirect("/register");
     });
-}
+};
 
 const profilePage = (req, res) => {
   return res.render("profile", {
     user: req.decoded
   });
-}
-
+};
 
 const accountPage = (req, res) => {
   const { knex } = req.app.locals;
   knex
-    .select("id","username","name")
+    .select("id", "username", "name")
     .from("users")
     .then(users => {
       return res.render("account", {
         users
       });
     });
-}
+};
 
+const aboutPage = (req, res) => {
+  return res.render("about");
+};
 
+const contactPage = (req, res) => {
+  return res.render("contact");
+};
 module.exports = {
   homePage,
   logout,
@@ -93,5 +97,7 @@ module.exports = {
   loginPage,
   login,
   profilePage,
-  accountPage
+  accountPage,
+  aboutPage,
+  contactPage
 };
