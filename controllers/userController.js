@@ -22,7 +22,7 @@ const registerPage = (req, res) => {
 
 const register = (req, res) => {
   user
-    .insertUser(req.body.username, req.body.password)
+    .insertUser(req.body.name,req.body.username, req.body.password)
     .then(response => {
       if (response) {
         req.session.user = response[0];

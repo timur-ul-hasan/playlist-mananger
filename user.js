@@ -39,10 +39,10 @@ const createToken = payload => {
   return token;
 };
 
-function insertUser(username, password) {
+function insertUser(name,username, password) {
   return hashPassword(password)
     .then(hash => {
-      return knex("users").insert({ username, password: hash });
+      return knex("users").insert({name, username, password: hash });
     })
     .then(id => {
       return knex

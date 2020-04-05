@@ -121,10 +121,10 @@ app.get("/logout", userController.logout);
 app.get("/playlists", playlistsController.listAllPlaylist);
 app
   .route("/add-playlist")
-  .get(playlistsController.addPlaylistPage)
-  .post(playlistsController.createPlaylist);
+  .get(middlewares.authenticate,playlistsController.addPlaylistPage)
+  .post(middlewares.authenticate,playlistsController.createPlaylist);
 
-app.route("/playlist/:playlistId").get(playlistsController.playListPage);
+app.route("/playlist/:playlistId").get(middlewares.authenticate,playlistsController.playListPage);
 
 app.route("/add-song").post(upload.single("song"), playlistsController.addSong);
 
