@@ -14,7 +14,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 require("./setup.js");
-const port = process.env.port || 80;
+const port = process.env.port || 8000;
 
 const sqliteOptions = {
   client: "sqlite3",
