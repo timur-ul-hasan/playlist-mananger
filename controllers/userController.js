@@ -10,8 +10,10 @@ const homePage = (req, res) => {
 
 
 const logout = (req, res) => {
-  res.clearCookie("jwt");
-  res.redirect("/");
+  req.session.destroy(function(err) {
+    res.clearCookie("jwt");
+    res.redirect("/");
+  })
 };
 
 const registerPage = (req, res) => {
@@ -21,9 +23,9 @@ const registerPage = (req, res) => {
 const register = (req, res) => {
   user
     .insertUser(req.body.username, req.body.password)
-    .then(user => {
-      if (user) {
-        req.session.user = user[0];
+    .then(response => {
+      if (response) {
+        req.session.user = response[0];
         return res.redirect("/profile");
       } else {
         return res.render("register", {
@@ -49,8 +51,6 @@ const login = (req, res) => {
     .then(response => {
       if (response) {
         req.session.user = response;
-        const token = user.createToken(response.username);
-        res.cookie("jwt", token);
         return res.redirect("/profile");
       } else {
         return res.render("login", {

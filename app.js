@@ -10,7 +10,7 @@ const middlewares = require("./middlewares");
 const userController = require("./controllers/userController");
 const playlistsController = require("./controllers/playlistController");
 const app = express();
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 require("./setup.js");
@@ -37,7 +37,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 600000
+      expires: 1000 * 60 * 60 * 24 * 7
     }
   })
 );
@@ -71,21 +71,15 @@ app.post("/uploadfile", upload.single("myFile"), (req, res, next) => {
 
 /* Global Middleware to conditional render stuff in views. */
 app.use((req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    jwt.verify(token, "s3cr3t", (error, decodedToken) => {
-      if (error) {
-        res.locals.authenticated = false;
-        next();
-      } else {
-        res.locals.authenticated = true;
-        next();
-      }
-    });
+  console.log(req.session.user,req.cookies);
+  if (req.cookies.user_sid && req.session.user) {
+    res.locals.authenticated = true;
+    res.locals.user = req.session.user;
   } else {
     res.locals.authenticated = false;
-    next();
+    res.clearCookie('user_sid');
   }
+  next();
 });
 
 app.use(serveStatic(path.join(__dirname, "public")));
