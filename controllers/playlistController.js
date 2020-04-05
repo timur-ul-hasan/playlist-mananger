@@ -16,6 +16,13 @@ function addPlaylistPage(req, res) {
   res.render("addPlaylist");
 }
 
+function addSongPage(req, res) {
+  const { playlistId } = req.params;
+  res.render("add-song-page", {
+    playlistId
+  });
+}
+
 function playListPage(req, res) {
   const { playlistId } = req.params;
   const { knex } = req.app.locals;
@@ -46,7 +53,7 @@ function addSong(req, res, next) {
       url: file.path.substring(7)
     })
     .then(song => {
-      return res.redirect(`playlist/${playlist_id}`);
+      return res.redirect(`playlist/${req.body.playlistId}`);
     });
 }
 
@@ -64,9 +71,11 @@ function createPlaylist(req, res) {
 }
 
 module.exports = {
+  addPlaylist,
   listAllPlaylist,
   createPlaylist,
   addPlaylistPage,
   playListPage,
-  addSong
+  addSong,
+  addSongPage
 };

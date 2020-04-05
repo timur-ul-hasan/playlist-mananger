@@ -127,7 +127,12 @@ app
   .route("/playlist/:playlistId")
   .get(middlewares.authenticate, playlistsController.playListPage);
 
-app.route("/add-song").post(upload.single("song"), playlistsController.addSong);
+app.get(
+  "/add-song/:playlistId",
+  middlewares.authenticate,
+  playlistsController.addSongPage
+);
+app.post("/add-song", upload.single("song"), playlistsController.addSong);
 
 /* Accounts routes */
 app.get("/accounts", userController.accountPage);
