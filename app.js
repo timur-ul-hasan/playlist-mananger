@@ -127,6 +127,8 @@ app
   .get(playlistsController.addPlaylistPage)
   .post(playlistsController.createPlaylist);
 
+app.route("/playlist/:playlistId").get(playlistsController.playListPage);
+
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
   console.log(`Server running on ${app.get("port")}`)

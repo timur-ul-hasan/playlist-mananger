@@ -16,6 +16,12 @@ function addPlaylistPage(req, res) {
   res.render("addPlaylist");
 }
 
+function playListPage(req, res) {
+  const { playlistId } = req.params;
+
+  res.render("playlist", {});
+}
+
 function addPlaylist(req, res) {
   res.render("addPlaylist");
 }
@@ -32,5 +38,6 @@ function createPlaylist(req, res) {
 module.exports = {
   listAllPlaylist,
   createPlaylist,
-  addPlaylistPage
+  addPlaylistPage,
+  playListPage
 };

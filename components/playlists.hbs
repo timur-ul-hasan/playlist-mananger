@@ -2,8 +2,9 @@
     <ul class="people_list">
         {{#each playlists}}
         <li><span>
-                {{this.name}}
-            </span></li>
+                <a href="/playlist/{{this.id}}">{{this.name}}</a>
+            </span>
+        </li>
         {{/each}}
     </ul>
     <a href="/add-playlist">Add Playlist</a>
