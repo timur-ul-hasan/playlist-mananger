@@ -4,8 +4,6 @@ function listAllPlaylist(req, res) {
     .select("*")
     .from("playlists")
     .then(playlists => {
-      console.log(playlists);
-
       return res.render("playlists", {
         playlists
       });
