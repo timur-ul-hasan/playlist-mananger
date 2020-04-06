@@ -81,6 +81,26 @@ const accountPage = (req, res) => {
     });
 };
 
+const userPage = (req, res) => {
+  const { knex } = req.app.locals;
+  const { userId } = req.params;
+  knex("users")
+    .leftJoin("playlists", "users.id", "=", "playlists.user_id")
+    .select(
+      "users.id as user_id",
+      "username",
+      "users.name as fullname",
+      "playlists.name as playlistName",
+      "playlists.id as playlistId"
+    )
+    .where("users.id", userId)
+    .then(users => {
+      return res.render("userpage", {
+        users
+      });
+    });
+};
+
 const aboutPage = (req, res) => {
   return res.render("about");
 };
@@ -98,5 +118,6 @@ module.exports = {
   profilePage,
   accountPage,
   aboutPage,
-  contactPage
+  contactPage,
+  userPage
 };

@@ -63,7 +63,7 @@ function createPlaylist(req, res) {
   const { knex } = req.app.locals;
   const payload = req.body;
   knex("playlists")
-    .insert(payload)
+    .insert({ ...payload, user_id: req.session.user.id })
     .then(response => res.redirect("/playlists"))
     .catch(error => res.status(500).json(error));
 }
