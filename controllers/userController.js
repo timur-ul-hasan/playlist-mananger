@@ -33,7 +33,6 @@ const register = (req, res) => {
       }
     })
     .catch(error => {
-      console.log(error);
       return res.redirect("/register");
     });
 };

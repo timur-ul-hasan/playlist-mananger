@@ -177,3 +177,7 @@ a.youtube {
   border-bottom: 2px solid rgb(76, 67, 65);
   margin-top: 0;
 }
+
+.card {
+  margin: 20px;
+}

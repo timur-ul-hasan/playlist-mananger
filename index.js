@@ -65,7 +65,7 @@ const upload = multer({
       cb(null, true);
     } else {
       cb(null, false);
-      cb(new Error("Only Mp3 format allowed!"));
+      cb("Please add mp3 files only for now");
     }
   }
 });
@@ -124,8 +124,11 @@ app.get(
   middlewares.authenticate,
   playlistsController.addSongPage
 );
-app.post("/add-song", upload.single("song"), playlistsController.addSong);
-
+app.post(
+  "/add-song/:playlistId",
+  upload.single("song"),
+  playlistsController.addSong
+);
 /* Accounts routes */
 app.get("/accounts", middlewares.authenticate, userController.accountPage);
 app.get("/account/:userId", middlewares.authenticate, userController.userPage);

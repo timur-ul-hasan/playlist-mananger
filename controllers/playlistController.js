@@ -36,7 +36,14 @@ function playListPage(req, res) {
     });
 }
 
-function addSong(req, res, next) {
+function addSong(err, req, res, next) {
+  if (err) {
+    return res.render("add-song-page", {
+      playlistId: req.body.playlistId,
+      error: err
+    });
+  }
+  return res.json(err);
   const { knex } = req.app.locals;
   const file = req.file;
   if (!file) {
