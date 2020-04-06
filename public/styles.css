@@ -1,40 +1,88 @@
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding: 0;
+    background-color: #f2f2f2;
 }
+
 .register-wrapper {
-    max-width: 400px;
+    width: 400px;
     margin: auto;
 }
-footer,
 .navbar {
     height: 70px;
 }
 footer {
+    text-align: center;
     margin-top: auto;
+}
+footer p {
+    margin: 10px;
 }
 .add-button-wrapper {
     margin: 20px 0;
     justify-content: flex-end;
 }
+.btn-group.btn-group-block {
+    margin: 30px 0;
+}
+main {
+    padding: 10px;
+}
+.section-wrapper {
+    min-width: 1200px;
+    padding: 0 calc((100vw - 1200px) / 2);
+}
+
+.section-wrapper.navigation {
+    background-color: #333;
+}
+.section-wrapper.navigation .btn.btn-link {
+    color: #eee;
+}
+
+.section-wrapper:last-child {
+    margin-top: auto;
+}
+.section-wrapper.footer {
+    background-color: #f2f2f2;
+    border-top: 1px solid #cecece;
+}
+.section-wrapper.main-section {
+    background-color: #fff;
+    max-width: 1200px;
+    display: flex;
+    padding: 0;
+    margin: 0 auto;
+    flex-direction: column;
+    min-height: calc(100vh - (70px + 44px));
+}
+tr:hover {
+    background: #eef0f3;
+}
 
 /*contact page style*/
 /*icon of contact page heading one*/
+.contactContainer {
+    margin: 50px auto;
+    display: flex;
+}
 #contact h1 {
     border-bottom: 1px solid rgb(76, 67, 65);
+    max-width: 400px;
 }
 /*contact heading 2*/
 #contact h2 {
     font-size: 1.4em;
     float: none;
     margin-bottom: 1em;
+    border-bottom: 1px solid rgb(76, 67, 65);
+    max-width: 400px;
 }
 /*contact list*/
 #contact ul {
-    list-style: none;
+    list-style: list;
 }
 /*contact list*/
 #contact li {
@@ -68,64 +116,4 @@ a.linked {
 a.youtube {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA1lJREFUeNrMWL+PEkEUHgjJYWOwMNHEArTiKrA5TxMjGgujxZmrTCzA2Ct/wQUTayyMlZErjFddpNBYGIWYCNgIFVcpW9wFE4sjNmKF74M3yzA7+4sjF14yYY/bnfft9773zQwRMUeMRqMMfWAkDf+2aHQikUgn7LyREACQeIvGBo3EcPhP/Or/dtx35uxpEY+v4HJAo0qjRMCshYBhEBUa1waHf0Sz0RG93r4RiAoolTon1i9nROLUSXxVp1HwAxXxAfKYPsoA8Xb34xhE2ACou5s3JagiAXoWCgyBSAAEjXzt8zdR+9QSR43cjUsid30Nl9sMauALhoHUSBOZndfv5mLDi6V79+9AUxB3TgcUNTxTBpBXL3cXCgSB+TAv5mfm3ZmRGqkcAciTp4/sa7d5wFDh4aZDQ1Gta8rQyKIZMTGEPMjHeR1lqqBrFiHWIIE8yMe2MS0To+vptD6YUMlvc+AKNHtxlUZ6fJ2kEsiAF8EcZbS/79HomsqVggfF+PstoNTLc0jfIZFM0vzanpncbltqWfYRh/nNlufAUS7kpWfh7AVZpg04q4PKSV3tWL+SNYrRBCRocF4sMSLGi17CJFqg3uv+EOnVC5NyZNOOUmW4PAj1Xq9u0tlBfuAAMxm3RQ/RUhgDA7JsCCyI6t+tRuiFWtXVGEzSa9EDckt5u6zChMqCSXNhAAFHNFgbTrUDIUthYlV209c8EQ1qUuwJNggAkqBAM/RyLGD0N4dOeAVm/+gaWz5slwUGg4QqO6peVFtQ9Xfr9lViMTtuf2whVLGbAqZn6ebkxQ42SjMbXq2EfQIj50O3AZAqctWBNXO0wEwHDwUBBF3o5dDN8sP7L6424ebSvGfuxLCLJ8MZEJUJrxaXQsXbSeDSFPV7Xjx/Y++D4ydWxPDvxMf6hvlTk7VsABxybapSh+SbjbbvTk1lsOlhckju93KKPVRVAZdAYUpZcc372LUZBkz1D7sN5dKVbDB8hKjr4tRrq24PTPoJG5yvLo8wamsXgBIt6EFnoBIFPS0wKwWHzzC6IsxML5e+QFo+h7gg5WHTLKoHO9NRpUL057GLlwnxcPL8FKD1c3/uRRHlxg6S2nmbgBSW9ty03CfKpTtrL+WvEEv3+8xx/nL1X4ABAH5eDkhUFH1oAAAAAElFTkSuQmCC)
         no-repeat left center;
-}
-/*form styles of contact page */
-fieldset {
-    border: none;
-    background: rgb(197, 189, 238);
-    position: relative;
-    padding: 1em;
-    margin: 1em 0;
-}
-/*form text enter*/
-fieldset:before {
-    content: attr(title);
-    display: block;
-    font: 1.2em Cantarell, Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    border-bottom: 1px solid rgb(76, 67, 65);
-    width: 80%;
-}
-/*form heading*/
-legend {
-    position: absolute;
-    top: 0;
-    left: -2000em;
-}
-/*form paragraph*/
-fieldset p {
-    font: 0.8em Cantarell, Arial, Helvetica, sans-serif;
-    margin: 1em 0 0;
-    font-style: italic;
-}
-/*form label*/
-label {
-    display: block;
-    font-size: 1em;
-    margin: 0.8em 0 0;
-}
-/*form input*/
-input[type="text"],
-input[type="email"],
-input[type="url"],
-textarea {
-    width: 250px;
-}
-/*this is form input style*/
-input[type="submit"] {
-    display: block;
-    margin: 1em 0;
-}
-/*form display*/
-.inline {
-    display: inline;
-}
-/*form with*/
-fieldset div {
-    width: 250px;
-}
-/*your turn style*/
-#fieldset {
-    width: 300px;
-    padding: 70px;
 }
