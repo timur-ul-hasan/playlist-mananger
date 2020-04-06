@@ -84,7 +84,7 @@ const userPage = (req, res) => {
   const { knex } = req.app.locals;
   const { userId } = req.params;
   knex("users")
-    .leftJoin("playlists", "users.id", "=", "playlists.user_id")
+    .join("playlists", "users.id", "=", "playlists.user_id")
     .select(
       "users.id as user_id",
       "username",
