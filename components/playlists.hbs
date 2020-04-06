@@ -5,6 +5,7 @@
         <tr>
         <th>ID</th>
         <th>Name</th>
+        <th>Status</th>
         <th>Actions</th>
         </tr>
     </thead>
@@ -13,8 +14,10 @@
             <tr>
                 <td>{{this.id}}</td>
                 <td>{{this.name}}</td>
+                <td>{{this.status}}</td>
                 <td>
-                    <a href="playlist/{{this.id}}">View</a>
+                    <a href="playlist/{{this.id}}">View</a> |
+                    <a href="delete-playlist/{{this.id}}">Remove</a>
                     </td>
             </tr>
             {{/each}}
