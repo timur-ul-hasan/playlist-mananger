@@ -25,7 +25,7 @@ const register = (req, res) => {
     .then(response => {
       if (response) {
         req.session.user = response[0];
-        return res.redirect("/profile");
+        return res.redirect("/");
       } else {
         return res.render("register", {
           error: "User already registered."
@@ -50,7 +50,7 @@ const login = (req, res) => {
     .then(response => {
       if (response) {
         req.session.user = response;
-        return res.redirect("/profile");
+        return res.redirect("/");
       } else {
         return res.render("login", {
           error:
