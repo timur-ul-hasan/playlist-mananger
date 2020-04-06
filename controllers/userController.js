@@ -81,6 +81,13 @@ const accountPage = (req, res) => {
     });
 };
 
+const aboutPage = (req, res) => {
+  return res.render("about");
+};
+
+const contactPage = (req, res) => {
+  return res.render("contact");
+};
 module.exports = {
   homePage,
   logout,
@@ -89,5 +96,7 @@ module.exports = {
   loginPage,
   login,
   profilePage,
-  accountPage
+  accountPage,
+  aboutPage,
+  contactPage
 };

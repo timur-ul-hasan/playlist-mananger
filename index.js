@@ -136,6 +136,8 @@ app.post("/add-song", upload.single("song"), playlistsController.addSong);
 
 /* Accounts routes */
 app.get("/accounts", userController.accountPage);
+app.get("/about", userController.aboutPage);
+app.get("/contact", userController.contactPage);
 
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
