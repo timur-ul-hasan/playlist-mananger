@@ -5,11 +5,14 @@
             justify-content: space-between;
             margin : 20px
         }
+        .remove{
+            float:right;
+        }
     </style>
     <header>
         <h3>
             Playlist:
-        </h3>
+         </h3>
         <a href="/add-song/{{this.playlistId}}"> <button class="btn btn-primary">Add New Song </button></a>
     </header>
     <div class="song-wrapper">
@@ -22,6 +25,7 @@
                 <audio controls>
                     <source src="/{{this.url}}" type="audio/mp3">
                 </audio>
+                <a class="remove" href="/delete-song/{{this.id}}">Remove</a>
             </div>
         </div>
         {{/each}}

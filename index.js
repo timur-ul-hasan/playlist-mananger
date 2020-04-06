@@ -123,6 +123,16 @@ app
   .get(middlewares.authenticate, playlistsController.addPlaylistPage)
   .post(middlewares.authenticate, playlistsController.createPlaylist);
 
+app.get("/delete-playlist/:playlistId", (req, res) => {
+  const { playlistId } = req.params;
+  knex("playlists")
+    .where("id", playlistId)
+    .del()
+    .then(() => {
+      res.redirect("back");
+    });
+});
+
 app
   .route("/playlist/:playlistId")
   .get(middlewares.authenticate, playlistsController.playListPage);
@@ -133,6 +143,15 @@ app.get(
   playlistsController.addSongPage
 );
 app.post("/add-song", upload.single("song"), playlistsController.addSong);
+app.get("/delete-song/:songId", (req, res) => {
+  const { songId } = req.params;
+  knex("songs")
+    .where("id", songId)
+    .del()
+    .then(() => {
+      res.redirect("back");
+    });
+});
 
 /* Accounts routes */
 app.get("/accounts", userController.accountPage);
