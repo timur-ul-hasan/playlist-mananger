@@ -7,6 +7,79 @@
     <link rel="stylesheet" href="/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="/dist/spectre-icons.min.css">
     <link rel="stylesheet" href="/styles.css">
+    <style>
+    body {
+      --nav-color: #333;
+      --plain-white: #fff;
+      --half-white : #f2f2f2;
+      --text-color : #eee;
+    }
+    .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+ 
+    .register-wrapper {
+        width : 400px;
+        margin: auto;
+    }
+    .navbar {
+        height:70px;
+    }
+    footer {
+        text-align: center;
+        margin-top: auto;
+    }
+    footer p{
+       margin : 10px
+    }
+    .add-button-wrapper{
+        margin: 20px 0;
+        justify-content: flex-end;
+    }
+    .btn-group.btn-group-block {
+        margin: 30px 0;
+    }
+    main {
+      padding : 10px;
+    }
+    .section-wrapper {
+        min-width: 1200px;
+         padding: 0 calc((100vw - 1200px)/2);
+    }
+
+    .section-wrapper.navigation {
+        background-color: #333;
+    }
+    .section-wrapper.navigation .btn.btn-link{
+        color: #eee;
+    }
+
+    .section-wrapper:last-child {
+         margin-top: auto;
+        
+    }
+     .section-wrapper.footer {
+        background-color: #f2f2f2;
+        border-top: 1px solid #cecece;
+
+    }
+    .section-wrapper.main-section{
+        background-color: #fff;
+        max-width: 1200px;
+        display: flex;
+        padding: 0;
+        margin: 0 auto;
+        flex-direction: column;
+        min-height:calc(100vh - (70px + 44px));
+    }
+    tr:hover {
+        background: #eef0f3;
+    }
+    </style>
 </head>
 
 <body>
