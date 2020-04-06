@@ -58,23 +58,16 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-const upload = multer({ storage: storage });
-
-app.post("/uploadfile", upload.single("myFile"), (req, res, next) => {
-  const file = req.file;
-  if (!file) {
-    const error = new Error("Please upload a file");
-    error.httpStatusCode = 400;
-    return next(error);
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == "audio/mp3") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      cb(new Error("Only Mp3 format allowed!"));
+    }
   }
-  knex("songs")
-    .insert({
-      name: file.filename,
-      url: file.path.substring(7)
-    })
-    .then(song => {
-      res.send(song);
-    });
 });
 
 /* Global Middleware to conditional render stuff in views. */
@@ -122,7 +115,6 @@ app
   .route("/add-playlist")
   .get(middlewares.authenticate, playlistsController.addPlaylistPage)
   .post(middlewares.authenticate, playlistsController.createPlaylist);
-
 app
   .route("/playlist/:playlistId")
   .get(middlewares.authenticate, playlistsController.playListPage);
