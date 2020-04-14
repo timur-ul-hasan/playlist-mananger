@@ -25,7 +25,7 @@ const register = (req, res) => {
     .then(response => {
       if (response) {
         req.session.user = response[0];
-        return res.redirect("/profile");
+        return res.redirect("/");
       } else {
         return res.render("register", {
           error: "User already registered."
@@ -33,7 +33,6 @@ const register = (req, res) => {
       }
     })
     .catch(error => {
-      console.log(error);
       return res.redirect("/register");
     });
 };
@@ -50,7 +49,7 @@ const login = (req, res) => {
     .then(response => {
       if (response) {
         req.session.user = response;
-        return res.redirect("/profile");
+        return res.redirect("/");
       } else {
         return res.render("login", {
           error:
@@ -81,6 +80,26 @@ const accountPage = (req, res) => {
     });
 };
 
+const userPage = (req, res) => {
+  const { knex } = req.app.locals;
+  const { userId } = req.params;
+  knex("users")
+    .join("playlists", "users.id", "=", "playlists.user_id")
+    .select(
+      "users.id as user_id",
+      "username",
+      "users.name as fullname",
+      "playlists.name as playlistName",
+      "playlists.id as playlistId"
+    )
+    .where("users.id", userId)
+    .then(users => {
+      return res.render("userpage", {
+        users
+      });
+    });
+};
+
 const aboutPage = (req, res) => {
   return res.render("about");
 };
@@ -98,5 +117,6 @@ module.exports = {
   profilePage,
   accountPage,
   aboutPage,
-  contactPage
+  contactPage,
+  userPage
 };

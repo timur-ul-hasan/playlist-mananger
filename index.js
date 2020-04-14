@@ -58,23 +58,16 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-const upload = multer({ storage: storage });
-
-app.post("/uploadfile", upload.single("myFile"), (req, res, next) => {
-  const file = req.file;
-  if (!file) {
-    const error = new Error("Please upload a file");
-    error.httpStatusCode = 400;
-    return next(error);
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == "audio/mp3") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      cb("Please add mp3 files only for now");
+    }
   }
-  knex("songs")
-    .insert({
-      name: file.filename,
-      url: file.path.substring(7)
-    })
-    .then(song => {
-      res.send(song);
-    });
 });
 
 /* Global Middleware to conditional render stuff in views. */
@@ -142,6 +135,11 @@ app.get(
   middlewares.authenticate,
   playlistsController.addSongPage
 );
+app.post(
+  "/add-song/:playlistId",
+  upload.single("song"),
+  playlistsController.addSong
+);
 app.post("/add-song", upload.single("song"), playlistsController.addSong);
 app.get("/delete-song/:songId", (req, res) => {
   const { songId } = req.params;
@@ -154,9 +152,10 @@ app.get("/delete-song/:songId", (req, res) => {
 });
 
 /* Accounts routes */
-app.get("/accounts", userController.accountPage);
-app.get("/about", userController.aboutPage);
-app.get("/contact", userController.contactPage);
+app.get("/accounts", middlewares.authenticate, userController.accountPage);
+app.get("/account/:userId", middlewares.authenticate, userController.userPage);
+app.get("/about", middlewares.authenticate, userController.aboutPage);
+app.get("/contact", middlewares.authenticate, userController.contactPage);
 
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>

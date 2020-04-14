@@ -36,7 +36,14 @@ function playListPage(req, res) {
     });
 }
 
-function addSong(req, res, next) {
+function addSong(err, req, res, next) {
+  if (err) {
+    return res.render("add-song-page", {
+      playlistId: req.body.playlistId,
+      error: err
+    });
+  }
+  return res.json(err);
   const { knex } = req.app.locals;
   const file = req.file;
   if (!file) {
@@ -63,7 +70,7 @@ function createPlaylist(req, res) {
   const { knex } = req.app.locals;
   const payload = req.body;
   knex("playlists")
-    .insert(payload)
+    .insert({ ...payload, user_id: req.session.user.id })
     .then(response => res.redirect("/playlists"))
     .catch(error => res.status(500).json(error));
 }
