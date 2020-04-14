@@ -16,6 +16,9 @@ knex.schema
           table.string("name");
           table.string("username");
           table.string("password");
+          table.string("confirmPassword");
+          table.string("question");
+          table.string("answer");
         })
         .then(() => console.info("Users table created"))
         .catch(error => console.error(error));
