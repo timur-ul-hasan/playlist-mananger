@@ -53,8 +53,6 @@ function playListPage(req, res) {
             self: res.locals.authenticated
               ? playlist.user_id == res.locals.user.id
               : false
-            fill:playlist.name == "" ? false :
-            true  
           });
         });
     });

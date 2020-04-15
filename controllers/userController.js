@@ -101,10 +101,10 @@ const userPage = (req, res) => {
     )
     .where("users.id", userId)
     .then(users => {
-      console.log(users);
       return res.render("userpage", {
         users,
-        fullname: users.length ? users[0].fullname : ""
+        fullname: users.length ? users[0].fullname : "",
+        fill: users.length ? users[0].fullname : false
       });
     });
 };

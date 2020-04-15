@@ -1,4 +1,5 @@
 <main>
+    {{#if fill  }}
     <h3>Name : {{ fullname }}</h3>
     <h2>Playlists</h2>
     <table class="table">
@@ -22,4 +23,7 @@
         </ul>
     </tbody>
     </table>
+    {{else}}
+    <h2>This user has no playlist.</h2>
+    {{/if}}
 </main>
