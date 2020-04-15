@@ -10,7 +10,7 @@
         }
     </style>
     <header>
-        <h3>Playlist: </h3>
+        <h3>Playlist: {{playlistName}} </h3>
         {{#if self  }}
         <a href="/add-song/{{this.playlistId}}"> <button class="btn btn-primary">Add New Song </button></a>
         {{/if}}
@@ -25,9 +25,13 @@
                 <audio controls>
                     <source src="/{{this.url}}" type="audio/mp3">
                 </audio>
+                {{#if ../self  }}
                 <a class="remove" href="/delete-song/{{this.id}}">Remove</a>
+            {{/if}}
             </div>
         </div>
+        {{else}}
+        <h3>This Playlist is empty</h3>
         {{/each}}
     </div>
 </main>

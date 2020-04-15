@@ -17,6 +17,8 @@ function addPlaylistPage(req, res) {
 
 function addSongPage(req, res) {
   const { playlistId } = req.params;
+  const { knex } = req.app.locals;
+
   knex
     .select("*")
     .from("playlists")
@@ -39,35 +41,33 @@ function playListPage(req, res) {
     .where("playlists.id", playlistId)
     .then(songs => {
       return knex
-        .select("user_id")
+        .select("user_id", "name")
         .from("playlists")
         .where("id", playlistId)
         .first()
         .then(playlist => {
-          console.log(
-            songs,
-            playlist,
-            res.locals.user,
-            playlist.user_id == res.locals.user.id
-          );
-
           return res.render("playlist", {
             songs,
             playlistId,
-            self: playlist.user_id == res.locals.user.id
+            playlistName: playlist.name,
+            self: res.locals.authenticated
+              ? playlist.user_id == res.locals.user.id
+              : false
+            fill:playlist.name == "" ? false :
+            true  
           });
         });
     });
 }
 
-function addSong(err, req, res, next) {
-  if (err) {
-    return res.render("add-song-page", {
-      playlistId: req.body.playlistId,
-      error: err
-    });
-  }
-  return res.json(err);
+function addSong(req, res, next) {
+  // console.log("here");
+  // if (err) {
+  //   return res.render("add-song-page", {
+  //     playlistId: req.body.playlistId,
+  //     error: err
+  //   });
+  //}
   const { knex } = req.app.locals;
   const file = req.file;
   if (!file) {
@@ -95,9 +95,36 @@ function createPlaylist(req, res) {
   const payload = req.body;
   knex("playlists")
     .insert({ ...payload, user_id: req.session.user.id })
-    .then(response => res.redirect("/playlists"))
+    .then(response => res.redirect("/profile"))
     .catch(error => res.status(500).json(error));
 }
+function editPlaylistPage(req, res) {
+  const { knex } = req.app.locals;
+  const { playlistId } = req.params;
+  knex("playlists")
+    .select("*")
+    .where("id", playlistId)
+    .first()
+    .then(playlist =>
+      res.render("edit-playlist", {
+        public: playlist.status === "public",
+        private: playlist.status === "private",
+        playlist: playlist
+      })
+    )
+    .catch(error => res.status(500).json(error));
+}
+
+const editPlaylist = (req, res) => {
+  const { knex } = req.app.locals;
+  const payload = req.body;
+  const { playlistId } = req.params;
+  knex("playlists")
+    .where("id", playlistId)
+    .update({ ...payload })
+    .then(response => res.redirect("/profile"))
+    .catch(error => res.status(500).json(error));
+};
 
 module.exports = {
   addPlaylist,
@@ -106,5 +133,7 @@ module.exports = {
   addPlaylistPage,
   playListPage,
   addSong,
-  addSongPage
+  addSongPage,
+  editPlaylistPage,
+  editPlaylist
 };

@@ -59,21 +59,21 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype == "audio/mp3") {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      cb("Please add mp3 files only for now");
-    }
-  }
+  storage: storage
+  // fileFilter: (req, file, cb) => {
+  //   console.log(file.mimetype);
+  //   if (file.mimetype == "audio/mp3") {
+  //     cb(null, true);
+  //   } else {
+  //     cb(null, false);
+  //     cb("Please add mp3 files only for now");
+  //   }
+  // }
 });
 
 /* Global Middleware to conditional render stuff in views. */
 app.use((req, res, next) => {
   if (req.cookies.user_sid && req.session.user) {
-    console.log(req.session.user);
     res.locals.authenticated = true;
     res.locals.user = req.session.user;
   } else {
@@ -115,6 +115,11 @@ app
   .get(middlewares.authenticate, userController.accountInfo)
   .post(middlewares.authenticate, userController.userStatus);
 
+app
+  .route("/edit-playlist/:playlistId")
+  .get(middlewares.authenticate, playlistsController.editPlaylistPage)
+  .post(middlewares.authenticate, playlistsController.editPlaylist);
+
 app.get("/logout", userController.logout);
 app.get("/playlists", playlistsController.listAllPlaylist);
 app
@@ -131,20 +136,30 @@ app.get("/delete-playlist/:playlistId", (req, res) => {
       res.redirect("back");
     });
 });
-
+app.get("/delete-user", (req, res) => {
+  const { user } = res.locals;
+  knex("users")
+    .where("id", user.id)
+    .del()
+    .then(() => {
+      req.session.destroy(function(err) {
+        res.clearCookie("jwt");
+        res.redirect("/");
+      });
+    });
+});
 app.route("/playlist/:playlistId").get(playlistsController.playListPage);
 
-app.get(
-  "/add-song/:playlistId",
-  middlewares.authenticate,
-  playlistsController.addSongPage
-);
-app.post(
-  "/add-song/:playlistId",
-  upload.single("song"),
-  playlistsController.addSong
-);
+app
+  .route("/add-song/:playlistId")
+  .get(middlewares.authenticate, playlistsController.addSongPage);
+
 app.post("/add-song", upload.single("song"), playlistsController.addSong);
+app.post("/add-song", (req, res) => {
+  return res.json(req.body);
+});
+
+// app.post("/add-song/", upload.single("song"), playlistsController.addSong);
 app.get("/delete-song/:songId", (req, res) => {
   const { songId } = req.params;
   knex("songs")
@@ -160,6 +175,7 @@ app.get("/accounts", middlewares.authenticate, userController.accountPage);
 app.get("/account/:userId", middlewares.authenticate, userController.userPage);
 app.get("/about", middlewares.authenticate, userController.aboutPage);
 app.get("/contact", middlewares.authenticate, userController.contactPage);
+
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
   console.log(`Server running on ${app.get("port")}`)

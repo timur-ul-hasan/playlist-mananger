@@ -2,18 +2,15 @@
     <header class="navbar">
     <section class="navbar-section">
         <a href="/profile" class="btn btn-link">My Playlists</a>
-        <a href="/account-info" class="btn btn-link">AccountsInfo</a>
     </section>
 </header>
 <div class="register-wrapper">
-  <h2>Account info:</h2>
-  <h5>Username: {{user.username}}</h5> 
-  <h5>Name: {{user.name}}</h5>
-       <form action="/account-info" method="post">
+  <h5>Playlist Name: {{playlist.name}}</h5>
+       <form action="/edit-playlist/{{playlist.id}}" method="post">
         <fieldset >
             <div class="form-group">
                 <label class="form-label" for="input-example-19">Change Name</label>
-                <input class="form-input" type="text" id="input-example-19" placeholder="New Name" name="name" value="{{user.name}}"  required >
+                <input class="form-input" type="text" id="input-example-19" placeholder="New Name" name="name" value="{{playlist.name}}"  required >
             </div>
             <div class="form-group">
                 <label class="form-label">Status</label>
@@ -35,7 +32,5 @@
             </div>
         </fieldset>
     </form>
-     <a href="delete-user"><button class="btn btn-error" style="">Delete user</button></a>
-
 </div>
 </main>

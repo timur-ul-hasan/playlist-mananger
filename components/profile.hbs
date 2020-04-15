@@ -6,7 +6,7 @@
     </section>
 </header>
 <div>
-    <h3>Playlists</h3>
+    <h3>My Playlists:</h3>
     <table class="table">
     <thead>
         <tr>
@@ -25,6 +25,7 @@
                 <td>
                     <a href="playlist/{{this.id}}">View</a> 
                      | <a href="delete-playlist/{{this.id}}">Remove</a>
+                     | <a href="/edit-playlist/{{this.id}}">Edit</a>
                     </td>    
               </tr>
             {{/each}}
