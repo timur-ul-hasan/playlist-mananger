@@ -1,0 +1,39 @@
+<main>  
+    <header class="navbar">
+    <section class="navbar-section">
+        <a href="/profile" class="btn btn-link">My Playlists</a>
+        <a href="/account-info" class="btn btn-link">AccountsInfo</a>
+    </section>
+</header>
+<div class="register-wrapper">
+  <h2>Account info:</h2>
+  <h5>Username: {{user.username}}</h5> 
+  <h5>Name: {{user.name}}</h5>
+       <form action="/account-info" method="post">
+        <fieldset >
+            <div class="form-group">
+                <label class="form-label" for="input-example-19">Change Name</label>
+                <input class="form-input" type="text" id="input-example-19" placeholder="New Name" name="name" value="{{user.name}}"  required >
+            </div>
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <label class="form-radio">
+                    <input type="radio" name="status" value="public" {{#if public}}
+                    checked 
+                    {{/if}}/>
+                    <i class="form-icon"></i> Public
+                </label>
+                <label class="form-radio">
+                    <input type="radio" name="status" value="private" {{#if private}}
+                    checked                    
+                    {{/if}} />
+                    <i class="form-icon"></i> Private
+                </label>
+            </div>
+             <div class="btn-group btn-group-block">
+                <button class="btn btn-primary">Save changes</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</main>

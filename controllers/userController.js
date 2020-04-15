@@ -18,23 +18,33 @@ const logout = (req, res) => {
 const registerPage = (req, res) => {
   res.render("register");
 };
-
 const register = (req, res) => {
-  user
-    .insertUser(req.body.name, req.body.username, req.body.password)
-    .then(response => {
-      if (response) {
-        req.session.user = response[0];
-        return res.redirect("/");
-      } else {
-        return res.render("register", {
-          error: "User already registered."
-        });
-      }
-    })
-    .catch(error => {
-      return res.redirect("/register");
+  if (req.body.password != req.body.comPassword) {
+    return res.render("register", {
+      error: "Password are not same",
+      data: req.body
     });
+  } else {
+    user
+      .insertUser(req.body.name, req.body.username, req.body.password)
+      .then(response => {
+        if (response) {
+          req.session.user = response;
+          return res.redirect("/");
+        } else {
+          return res.render("register", {
+            error: "This Username is already taken",
+            data: req.body
+          });
+        }
+      })
+      .catch(error => {
+        return res.render("register", {
+          error: "This Username is already taken",
+          data: req.body
+        });
+      });
+  }
 };
 
 const loginPage = (req, res) => {
@@ -52,20 +62,16 @@ const login = (req, res) => {
         return res.redirect("/");
       } else {
         return res.render("login", {
-          error:
-            'Incorrect login details. Maybe try to <a href="/register">Register</a>.'
+          error: "Incorrect login details."
         });
       }
     })
     .catch(error => {
-      return res.redirect("/register");
+      return res.render("login", {
+        error: "Incorrect login details.",
+        data: req.body
+      });
     });
-};
-
-const profilePage = (req, res) => {
-  return res.render("profile", {
-    user: req.decoded
-  });
 };
 
 const accountPage = (req, res) => {
@@ -73,6 +79,7 @@ const accountPage = (req, res) => {
   knex
     .select("id", "username", "name")
     .from("users")
+    .where("status", "public")
     .then(users => {
       return res.render("account", {
         users
@@ -94,12 +101,59 @@ const userPage = (req, res) => {
     )
     .where("users.id", userId)
     .then(users => {
+      console.log(users);
       return res.render("userpage", {
-        users
+        users,
+        fullname: users.length ? users[0].fullname : ""
+      });
+    });
+};
+const userPlaylists = (req, res) => {
+  const { knex } = req.app.locals;
+  knex("users")
+    .join("playlists", "users.id", "=", "playlists.user_id")
+    .select(
+      "users.id as user_id",
+      "playlists.id as id",
+      "playlists.name as name",
+      "playlists.status as status"
+    )
+    .where("users.id", res.locals.user.id)
+    .then(playlist => {
+      return res.render("profile", {
+        playlist
       });
     });
 };
 
+const userStatus = (req, res) => {
+  const { knex } = req.app.locals;
+  const payload = req.body;
+  knex("users")
+    .where("id", res.locals.user.id)
+    .update({ ...payload })
+    .then(response => {
+      req.session.user = {
+        ...res.locals.user,
+        ...payload
+      };
+      res.render("account-info", {
+        public: req.session.user.status === "public",
+        private: req.session.user.status === "private",
+        user: req.session.user
+      });
+    })
+    .catch(error => res.status(500).json(error));
+};
+
+const accountInfo = (req, res) => {
+  const { knex } = req.app.locals;
+  return res.render("account-info", {
+    public: req.session.user.status === "public",
+    private: req.session.user.status === "private",
+    user: req.session.user
+  });
+};
 const aboutPage = (req, res) => {
   return res.render("about");
 };
@@ -107,6 +161,7 @@ const aboutPage = (req, res) => {
 const contactPage = (req, res) => {
   return res.render("contact");
 };
+
 module.exports = {
   homePage,
   logout,
@@ -114,9 +169,11 @@ module.exports = {
   register,
   loginPage,
   login,
-  profilePage,
   accountPage,
   aboutPage,
   contactPage,
-  userPage
+  userPage,
+  userPlaylists,
+  accountInfo,
+  userStatus
 };

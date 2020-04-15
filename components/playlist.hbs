@@ -10,10 +10,10 @@
         }
     </style>
     <header>
-        <h3>
-            Playlist:
-         </h3>
+        <h3>Playlist: </h3>
+        {{#if self  }}
         <a href="/add-song/{{this.playlistId}}"> <button class="btn btn-primary">Add New Song </button></a>
+        {{/if}}
     </header>
     <div class="song-wrapper">
         {{#each songs}}

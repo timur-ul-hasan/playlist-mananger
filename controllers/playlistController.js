@@ -3,6 +3,7 @@ function listAllPlaylist(req, res) {
   knex
     .select("*")
     .from("playlists")
+    .where("status", "public")
     .then(playlists => {
       return res.render("playlists", {
         playlists
@@ -16,23 +17,46 @@ function addPlaylistPage(req, res) {
 
 function addSongPage(req, res) {
   const { playlistId } = req.params;
-  res.render("add-song-page", {
-    playlistId
-  });
+  knex
+    .select("*")
+    .from("playlists")
+    .where("id", playlistId)
+    .then(playlist => {
+      return res.render("add-song-page", {
+        playlistId,
+        playlist
+      });
+    });
 }
 
 function playListPage(req, res) {
   const { playlistId } = req.params;
   const { knex } = req.app.locals;
   knex
-    .select("*")
+    .select("songs.*", "playlists.user_id as user_id")
     .from("songs")
-    .where("playlist_id", playlistId)
+    .join("playlists", "songs.playlist_id", "=", "playlists.id")
+    .where("playlists.id", playlistId)
     .then(songs => {
-      return res.render("playlist", {
-        songs,
-        playlistId
-      });
+      return knex
+        .select("user_id")
+        .from("playlists")
+        .where("id", playlistId)
+        .first()
+        .then(playlist => {
+          console.log(
+            songs,
+            playlist,
+            res.locals.user,
+            playlist.user_id == res.locals.user.id
+          );
+
+          return res.render("playlist", {
+            songs,
+            playlistId,
+            self: playlist.user_id == res.locals.user.id
+          });
+        });
     });
 }
 

@@ -39,17 +39,28 @@ const createToken = payload => {
   return token;
 };
 
-function insertUser(name,username, password) {
-  return hashPassword(password)
-    .then(hash => {
-      return knex("users").insert({name, username, password: hash });
-    })
-    .then(id => {
-      return knex
-        .select("id", "username")
-        .from("users")
-        .where({ id });
-    });
+function insertUser(name, username, password) {
+  return hashPassword(password).then(hash => {
+    return knex("users")
+      .where({
+        username
+      })
+      .then(response => {
+        if (response.length > 0) {
+          throw new Error();
+        } else {
+          return knex("users")
+            .insert({ name, username, password: hash })
+            .then(id => {
+              return knex
+                .select("*")
+                .from("users")
+                .where("username", username)
+                .first();
+            });
+        }
+      });
+  });
 }
 
 function checkUser(username, password) {

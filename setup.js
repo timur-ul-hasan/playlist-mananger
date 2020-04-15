@@ -16,7 +16,7 @@ knex.schema
           table.string("name");
           table.string("username");
           table.string("password");
-          table.string("confirmPassword");
+          table.string("status").defaultTo("public");
           table.string("question");
           table.string("answer");
         })

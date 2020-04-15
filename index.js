@@ -72,8 +72,8 @@ const upload = multer({
 
 /* Global Middleware to conditional render stuff in views. */
 app.use((req, res, next) => {
-  console.log(req.session.user, req.cookies);
   if (req.cookies.user_sid && req.session.user) {
+    console.log(req.session.user);
     res.locals.authenticated = true;
     res.locals.user = req.session.user;
   } else {
@@ -107,7 +107,13 @@ app
   .get(middlewares.checkSession, userController.loginPage)
   .post(userController.login);
 
-app.get("/profile", middlewares.authenticate, userController.profilePage);
+app
+  .route("/profile")
+  .get(middlewares.authenticate, userController.userPlaylists);
+app
+  .route("/account-info")
+  .get(middlewares.authenticate, userController.accountInfo)
+  .post(middlewares.authenticate, userController.userStatus);
 
 app.get("/logout", userController.logout);
 app.get("/playlists", playlistsController.listAllPlaylist);
@@ -126,9 +132,7 @@ app.get("/delete-playlist/:playlistId", (req, res) => {
     });
 });
 
-app
-  .route("/playlist/:playlistId")
-  .get(middlewares.authenticate, playlistsController.playListPage);
+app.route("/playlist/:playlistId").get(playlistsController.playListPage);
 
 app.get(
   "/add-song/:playlistId",
@@ -156,7 +160,6 @@ app.get("/accounts", middlewares.authenticate, userController.accountPage);
 app.get("/account/:userId", middlewares.authenticate, userController.userPage);
 app.get("/about", middlewares.authenticate, userController.aboutPage);
 app.get("/contact", middlewares.authenticate, userController.contactPage);
-
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
   console.log(`Server running on ${app.get("port")}`)
