@@ -1,23 +1,43 @@
-<header class="navbar">
-    <section class="navbar-section">
-        <a href="/" class="btn btn-link">Home</a>
-        <a href="/playlists" class="btn btn-link">Playlists</a>
-        <a href="/accounts" class="btn btn-link">Accounts</a>
-        {{#if authenticated}}
-        <a href="/profile" class="btn btn-link">Profile</a>
-        {{/if}}
-    </section>
-    <section class="navbar-center">
-        <!-- centered logo or brand -->
-    </section>
-    <section class="navbar-section">
-        {{#if authenticated}}
-        <a href="/logout" class="btn btn-link">Logout</a>
+<div class="off-canvas">
+  <!-- off-screen toggle button -->
+  <a class="off-canvas-toggle btn btn-primary btn-action" href="#sidebar-id">
+    <i class="icon icon-menu"></i>
+  </a>
+  <div id="sidebar-id" class="off-canvas-sidebar" >
+    <div>
+   <a href="/"><button class="btn sidebutton "> Home</button></a>
+   </div>
+   <div>
+   <a href="/playlists"><button class="btn sidebutton "> Playlists</button></a>
+   </div>
+   <div>
+   <a href="/accounts"><button class="btn sidebutton "> Accounts</button></a>
+   </div>
+    {{#if authenticated}}   
+   <div>
+   <a href="/profile"><button class="btn sidebutton "> Profile</button></a>
+   </div>
+   {{/if}}
+   <div>
+   <a href="/contact"><button class="btn sidebutton "> Contact</button></a>
+   </div>
+   <div>
+   <a href="/about"><button class="btn sidebutton "> About</button></a>
+   </div>
+   {{#if authenticated}}   
+   <div>
+   <a href="/logout"><button class="btn sidebutton "> Logout</button></a>
+   </div>
+    {{/if}}
+  </div> 
+
+  <a class="off-canvas-overlay" href="#close"></a>
+  <div class="off-canvas-content">
+     {{#if authenticated}}
+        <h2 class="btn btn-link"> {{user.name}}</h2>
         {{else}}
         <a href="/login" class="btn btn-link">Login</a>
         <a href="/register" class="btn btn-link">Register</a>
         {{/if}}
-        <a href="/contact" class="btn btn-link">Contact</a>
-        <a href="/about" class="btn btn-link">About</a>
-    </section>
-</header>
+  </div>
+</div>
