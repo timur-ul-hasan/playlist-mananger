@@ -97,9 +97,11 @@ const userPage = (req, res) => {
       "username",
       "users.name as fullname",
       "playlists.name as playlistName",
-      "playlists.id as playlistId"
+      "playlists.id as playlistId",
+      "playlists.status"
     )
     .where("users.id", userId)
+    .where("playlists.status", "public")
     .then(users => {
       return res.render("userpage", {
         users,

@@ -8,8 +8,8 @@
 }
 
 .register-wrapper {
-  width: 40%;
-  min-width: 230px;
+  width: 30%;
+  min-width: 300px;
   margin: auto;
 }
 .navbar {
@@ -178,7 +178,7 @@ a.youtube {
   border: none;
   padding: 20px;
   font-size: 90%;
-  background: rgb(237, 228, 214);
+  background: #fff;
   border-radius: 15px 15px 15px 15px;
 }
 .aboutsite h2 {

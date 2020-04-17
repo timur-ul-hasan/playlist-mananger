@@ -7,19 +7,21 @@
         {{/if}}
   <div class="form-group">
     <label class="form-label" for="input-example-1">Name</label >
-    <input class="form-input" type="text" id="name"  name="name" placeholder="Name" required value="{{{data.name}}}" >
+    <input class="form-input" type="text" id="name"  name="name" placeholder="Name" required value="{{{data.name}}}" minlength="2" >
   </div>
   <div class="form-group">
     <label class="form-label" for="input-example-1">Username</label>
-    <input class="form-input" type="text" id="username"  name="username" placeholder="Username" required value="{{{data.username}}}" >
+    <input class="form-input" type="text" id="username"  name="username" placeholder="Username" required value="{{{data.username}}}" 
+    minlength="4" maxlength="30" >
   </div>
   <div class="form-group">
     <label class="form-label" for="input-example-1">Password</label>
-    <input class="form-input" type="password" id="password"  name="password" placeholder="Password" required value="{{{data.password}}}">
+    <input class="form-input" type="password" id="password"  name="password" placeholder="Password" required value="{{{data.password}}}"
+    minlength="4" maxlength="16"  >
   </div>
   <div class="form-group">
     <label class="form-label" for="input-example-1">Comfirm Password</label>
-    <input class="form-input" type="password" id="password"  name="comPassword" placeholder="Comfirm Password" required value="{{{data.comPassword}}}" >
+    <input class="form-input" type="password" id="password"  name="comPassword" placeholder="Comfirm Password" required value="{{{data.comPassword}}}" minlength="4" maxlength="16"  >
   </div>
   <div class="btn-group btn-group-block">
     <button class="btn btn-primary">Register</button>
