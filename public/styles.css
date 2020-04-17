@@ -1,5 +1,6 @@
 .container {
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -7,7 +8,8 @@
 }
 
 .register-wrapper {
-  width: 400px;
+  width: 40%;
+  min-width: 230px;
   margin: auto;
 }
 .navbar {
@@ -31,7 +33,7 @@ main {
   padding: 10px;
 }
 .section-wrapper {
-  min-width: 1200px;
+  min-width: 90%;
   padding: 0 calc((100vw - 1200px) / 2);
 }
 
@@ -64,7 +66,8 @@ tr:hover {
 
 /*this is Homepage style */
 .home {
-  width: 100%;
+  width: 95%;
+  margin: auto;
   min-height: calc(100vh - (70px + 44px));
   background: url("/assets/images.jpg") /*no-repeat left center*/;
   display: flex;
@@ -98,6 +101,15 @@ tr:hover {
   padding-top: 0;
   padding-bottom: 0;
   border-radius: 10px 10px 10px 10px;
+}
+/*playlist with songs*/
+.addsong {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+.removesong {
+  float: right;
 }
 
 /*contact page style*/
@@ -160,8 +172,9 @@ a.youtube {
 
 /*this is about page style*/
 #aboutcont {
-  margin: 50px auto;
-  width: 660px;
+  margin: 2% auto;
+  width: 70%;
+  min-width: 250;
   border: none;
   padding: 20px;
   font-size: 90%;

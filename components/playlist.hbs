@@ -1,15 +1,5 @@
 <main>
-    <style>
-        header {
-            display: flex;
-            justify-content: space-between;
-            margin : 20px
-        }
-        .remove{
-            float:right;
-        }
-    </style>
-    <header>
+    <header class="addsong">
         <h3>Playlist: {{playlistName}} </h3>
         {{#if self  }}
         <a href="/add-song/{{this.playlistId}}"> <button class="btn btn-primary">Add New Song </button></a>
@@ -26,7 +16,7 @@
                     <source src="/{{this.url}}" type="audio/mp3">
                 </audio>
                 {{#if ../self  }}
-                <a class="remove" href="/delete-song/{{this.id}}">Remove</a>
+                <a class="removesong" href="/delete-song/{{this.id}}">Remove</a>
             {{/if}}
             </div>
         </div>
