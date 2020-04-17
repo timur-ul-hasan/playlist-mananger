@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -9,7 +9,7 @@
 
 /*nav bar */
 .sidebutton {
-  margin: 5px 0;
+  margin: 0;
   width: 100%;
   background-color: #3b4351;
   color: #f2f2f2;
@@ -17,19 +17,20 @@
 .sidebutton:hover {
   color: blue;
 }
-/*.sidebarbutton {
-  margin: 5px 10px;
-  min-width: 100%;
-}*/
-
 .off-canvas .off-canvas-sidebar {
-  top: 60px;
+  top: 53px;
+  bottom: auto;
 }
 /*nav style end here*/
 
 .register-wrapper {
   width: 40%;
-  max-width: 400px;
+  min-width: 230px;
+  margin: auto;
+}
+.addsong-wrapper {
+  width: 30%;
+  min-width: 300px;
   margin: auto;
 }
 .navbar {
@@ -53,7 +54,7 @@ main {
   padding: 10px;
 }
 .section-wrapper {
-  min-width: 1200px;
+  min-width: 90%;
   padding: 0 calc((100vw - 1200px) / 2);
 }
 
@@ -86,7 +87,9 @@ tr:hover {
 
 /*this is Homepage style */
 .home {
-  width: 100%;
+  margin: 2% auto;
+  width: 70%;
+  min-width: 250;
   min-height: calc(100vh - (70px + 44px));
   background: url("/assets/images.jpg") no-repeat left center;
   display: flex;
@@ -130,7 +133,6 @@ tr:hover {
 .removesong {
   float: right;
 }
-</style>
 /*contact page style*/
 .contactContainer {
   display: flex;

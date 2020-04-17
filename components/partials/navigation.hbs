@@ -1,21 +1,11 @@
 <div class="off-canvas">
-  <!-- off-screen toggle button -->
   <a class="off-canvas-toggle btn btn-primary btn-action" href="#sidebar-id">
     <i class="icon icon-menu"></i>
   </a>
   <div id="sidebar-id" class="off-canvas-sidebar" >
-    <div>
-   <a href="/"><button class="btn sidebutton "> Home</button></a>
-   </div>
-   <div>
-   <a href="/playlists"><button class="btn sidebutton "> Playlists</button></a>
-   </div>
-   <div>
-   <a href="/accounts"><button class="btn sidebutton "> Accounts</button></a>
-   </div>
     {{#if authenticated}}   
    <div>
-   <a href="/profile"><button class="btn sidebutton "> Profile</button></a>
+   <a href="/accounts"><button class="btn sidebutton "> Accounts</button></a>
    </div>
    {{/if}}
    <div>
@@ -33,8 +23,10 @@
 
   <a class="off-canvas-overlay" href="#close"></a>
   <div class="off-canvas-content">
+    <a href="/" class="btn btn-link">Home</a>
+    <a href="/playlists" class="btn btn-link">All Playlists</a>
      {{#if authenticated}}
-        <h2 class="btn btn-link"> {{user.name}}</h2>
+    <a href="/profile" class="btn btn-link">My playlists</a>
         {{else}}
         <a href="/login" class="btn btn-link">Login</a>
         <a href="/register" class="btn btn-link">Register</a>
