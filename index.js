@@ -83,7 +83,7 @@ app.post(
   playlistsApiController.addSong
 );
 
-app.get("/delete-song/:songId", playlistsApiController.deleteSong);
+app.delete("/delete-song/:songId", playlistsApiController.deleteSong);
 
 app
   .route("/api/user/playlists")

@@ -70,6 +70,7 @@ function playlistSongs(req, res) {
 
 function addSong(req, res, next) {
   const { knex } = req.app.locals;
+  const { playlistId } = req.params;
   const file = req.file;
   if (!file) {
     return res.status(422).json("Please upload a file");
@@ -77,7 +78,7 @@ function addSong(req, res, next) {
   knex("songs")
     .insert({
       name: req.body.name,
-      playlist_id: req.body.playlistId,
+      playlist_id: playlistId,
       url: file.path.substring(7),
     })
     .then((song) => {
