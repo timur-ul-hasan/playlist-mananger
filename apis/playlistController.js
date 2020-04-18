@@ -12,6 +12,7 @@ function playlists(req, res) {
 function createPlaylist(req, res) {
   const { knex } = req.app.locals;
   const payload = req.body;
+
   knex("playlists")
     .insert({ ...payload, user_id: req.user.id })
     .then((response) => res.status(201).end())
@@ -24,12 +25,13 @@ const editPlaylist = (req, res) => {
   const { playlistId } = req.params;
   knex("playlists")
     .where("id", playlistId)
-    .update({ ...payload })
+    .update(payload)
     .then((response) => res.status(201).end())
     .catch((error) => res.status(500).json(error));
 };
 
 const deletePlaylist = (req, res) => {
+  const { knex } = req.app.locals;
   const { playlistId } = req.params;
   knex("playlists")
     .where("id", playlistId)
@@ -70,9 +72,7 @@ function addSong(req, res, next) {
   const { knex } = req.app.locals;
   const file = req.file;
   if (!file) {
-    const error = new Error("Please upload a file");
-    error.httpStatusCode = 400;
-    return next(error);
+    return res.status(422).json("Please upload a file");
   }
   knex("songs")
     .insert({
@@ -84,6 +84,16 @@ function addSong(req, res, next) {
       res.status(201).end();
     });
 }
+function deleteSong(req, res, next) {
+  const { knex } = req.app.locals;
+  const { songId } = req.params;
+  knex("songs")
+    .where("id", songId)
+    .del()
+    .then(() => {
+      res.status(201).end();
+    });
+}
 
 module.exports = {
   playlists,
@@ -92,4 +102,5 @@ module.exports = {
   deletePlaylist,
   playlistSongs,
   addSong,
+  deleteSong,
 };

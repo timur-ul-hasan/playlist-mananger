@@ -7,16 +7,14 @@ const user = require("./user");
 const serveStatic = require("serve-static");
 const handlebars = require("express-handlebars");
 const middlewares = require("./middlewares");
-const userController = require("./controllers/userController");
-const playlistsController = require("./controllers/playlistController");
 const app = express();
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 require("./setup.js");
 const port = process.env.PORT || 3000;
-
 const usersApiController = require("./apis/userController");
+const playlistsApiController = require("./apis/playlistController.js");
 const jsonParser = bodyParser.json();
 
 const sqliteOptions = {
@@ -34,24 +32,9 @@ const store = new KnexSessionStore({
 });
 
 app.locals.knex = knex;
-
 app.set("port", port);
-app.set("view engine", "handlebars");
-app.set("views", `${__dirname}/components`);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  session({
-    key: "user_sid",
-    secret: "s3cr3t",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      expires: 1000 * 60 * 60 * 24 * 7,
-    },
-    store,
-  })
-);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -65,101 +48,42 @@ const upload = multer({
   storage: storage,
 });
 
-/* Global Middleware to conditional render stuff in views. */
-app.use((req, res, next) => {
-  if (req.cookies.user_sid && req.session.user) {
-    res.locals.authenticated = true;
-    res.locals.user = req.session.user;
-  } else {
-    res.locals.authenticated = false;
-    res.clearCookie("user_sid");
-  }
-  next();
-});
-
 app.use(serveStatic(path.join(__dirname, "public")));
 
-app.engine(
-  ".hbs",
-  handlebars({
-    layoutsDir: `${__dirname}/components`,
-    extname: ".hbs",
-    defaultLayout: "layout",
-    partialsDir: `${__dirname}/components/partials`,
-  })
+app.get("/api/playlists", playlistsApiController.playlists);
+
+app
+  .route("/api/add-playlist")
+  .post(
+    middlewares.authenticate,
+    jsonParser,
+    playlistsApiController.createPlaylist
+  );
+
+app
+  .route("/api/edit-playlist/:playlistId")
+  .post(
+    middlewares.authenticate,
+    jsonParser,
+    playlistsApiController.editPlaylist
+  );
+
+app.delete(
+  "/api/delete-playlist/:playlistId",
+  playlistsApiController.deletePlaylist
 );
-app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go through them later on)
-
-app.get("/", userController.homePage);
 
 app
-  .route("/register")
-  .get(middlewares.checkSession, userController.registerPage)
-  .post(userController.register);
-app
-  .route("/login")
-  .get(middlewares.checkSession, userController.loginPage)
-  .post(userController.login);
+  .route("/api/playlist/:playlistId")
+  .get(playlistsApiController.playlistSongs);
 
-app
-  .route("/profile")
-  .get(middlewares.authenticate, userController.userPlaylists);
-app
-  .route("/account-info")
-  .get(middlewares.authenticate, userController.accountInfo)
-  .post(middlewares.authenticate, userController.userStatus);
+app.post(
+  "/api/add-song/:playlistId",
+  upload.single("song"),
+  playlistsApiController.addSong
+);
 
-app
-  .route("/edit-playlist/:playlistId")
-  .get(middlewares.authenticate, playlistsController.editPlaylistPage)
-  .post(middlewares.authenticate, playlistsController.editPlaylist);
-
-app.get("/logout", userController.logout);
-app.get("/playlists", playlistsController.listAllPlaylist);
-app
-  .route("/add-playlist")
-  .get(middlewares.authenticate, playlistsController.addPlaylistPage)
-  .post(middlewares.authenticate, playlistsController.createPlaylist);
-
-app.get("/delete-playlist/:playlistId", (req, res) => {
-  const { playlistId } = req.params;
-  knex("playlists")
-    .where("id", playlistId)
-    .del()
-    .then(() => {
-      res.redirect("back");
-    });
-});
-app.get("/delete-user", (req, res) => {
-  const { user } = res.locals;
-  knex("users")
-    .where("id", user.id)
-    .del()
-    .then(() => {
-      req.session.destroy(function(err) {
-        res.clearCookie("jwt");
-        res.redirect("/");
-      });
-    });
-});
-app.route("/playlist/:playlistId").get(playlistsController.playListPage);
-
-app
-  .route("/add-song/:playlistId")
-  .get(middlewares.authenticate, playlistsController.addSongPage);
-
-app.post("/add-song", upload.single("song"), playlistsController.addSong);
-
-// app.post("/add-song/", upload.single("song"), playlistsController.addSong);
-app.get("/delete-song/:songId", (req, res) => {
-  const { songId } = req.params;
-  knex("songs")
-    .where("id", songId)
-    .del()
-    .then(() => {
-      res.redirect("back");
-    });
-});
+app.get("/delete-song/:songId", playlistsApiController.deleteSong);
 
 app
   .route("/api/user/playlists")
