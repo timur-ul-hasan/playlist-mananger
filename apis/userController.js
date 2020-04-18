@@ -11,7 +11,7 @@ const homePage = (req, res) => {
 const logout = (req, res) => {
   req.session.destroy(function(err) {
     res.clearCookie("jwt");
-    res.redirect("/");
+    res.status(200).end();
   });
 };
 
@@ -19,7 +19,7 @@ const registerPage = (req, res) => {
   res.render("register");
 };
 const register = (req, res) => {
-  if (req.body.password != req.body.comPassword) {
+  if (req.body.password != req.body.confirmPassword) {
     return res.render("register", {
       error: "Password are not same",
       data: req.body,
@@ -29,19 +29,19 @@ const register = (req, res) => {
       .insertUser(req.body.name, req.body.username, req.body.password)
       .then((response) => {
         if (response) {
-          req.session.user = response;
-          return res.redirect("/");
+          const token = user.createToken(response);
+          res.cookie("jwt", token);
+          res.append("Content-Type", "*/*");
+          res.status(200).end();
         } else {
-          return res.render("register", {
+          return res.status(500).json({
             error: "This Username is already taken",
-            data: req.body,
           });
         }
       })
       .catch((error) => {
-        return res.render("register", {
-          error: "This Username is already taken",
-          data: req.body,
+        return res.status(500).json({
+          error: error.message,
         });
       });
   }
@@ -55,26 +55,22 @@ const login = (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  return user
+  user
     .checkUser(username, password)
     .then((response) => {
       if (response) {
-        console.log(response);
-        const token = user.createToken(response.username);
+        const token = user.createToken(response);
         res.cookie("jwt", token);
         res.append("Content-Type", "*/*");
         res.status(200).end();
-        // res.json({
-        //   jwt: token,
-        // });
       } else {
-        return res.json({
+        return res.status(500).json({
           error: "Unauthenticated.",
         });
       }
     })
     .catch((error) => {
-      return res.json({
+      return res.status(500).json({
         error: "Unauthenticated.",
       });
     });
@@ -93,11 +89,10 @@ const accountPage = (req, res) => {
     });
 };
 
-const userPage = (req, res) => {
+const userInfo = (req, res) => {
   const { knex } = req.app.locals;
-  const { userId } = req.params;
   knex("users")
-    .join("playlists", "users.id", "=", "playlists.user_id")
+    .leftJoin("playlists", "users.id", "=", "playlists.user_id")
     .select(
       "users.id as user_id",
       "username",
@@ -105,9 +100,9 @@ const userPage = (req, res) => {
       "playlists.name as playlistName",
       "playlists.id as playlistId"
     )
-    .where("users.id", userId)
+    .where("users.id", 1)
     .then((users) => {
-      return res.render("userpage", {
+      return res.json({
         users,
         fullname: users.length ? users[0].fullname : "",
         fill: users.length ? users[0].fullname : false,
@@ -124,11 +119,9 @@ const userPlaylists = (req, res) => {
       "playlists.name as name",
       "playlists.status as status"
     )
-    .where("users.id", res.locals.user.id)
-    .then((playlist) => {
-      return res.render("profile", {
-        playlist,
-      });
+    .where("users.id", req.user.id)
+    .then((playlists) => {
+      return res.status(200).json(playlists);
     });
 };
 
@@ -160,12 +153,9 @@ const accountInfo = (req, res) => {
     user: req.session.user,
   });
 };
-const aboutPage = (req, res) => {
-  return res.render("about");
-};
 
-const contactPage = (req, res) => {
-  return res.render("contact");
+const basicAccountInfo = (req, res) => {
+  res.status(200).json(req.user);
 };
 
 module.exports = {
@@ -176,10 +166,9 @@ module.exports = {
   loginPage,
   login,
   accountPage,
-  aboutPage,
-  contactPage,
-  userPage,
   userPlaylists,
   accountInfo,
   userStatus,
+  userInfo,
+  basicAccountInfo,
 };

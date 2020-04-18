@@ -63,15 +63,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage: storage,
-  // fileFilter: (req, file, cb) => {
-  //   console.log(file.mimetype);
-  //   if (file.mimetype == "audio/mp3") {
-  //     cb(null, true);
-  //   } else {
-  //     cb(null, false);
-  //     cb("Please add mp3 files only for now");
-  //   }
-  // }
 });
 
 /* Global Middleware to conditional render stuff in views. */
@@ -87,7 +78,7 @@ app.use((req, res, next) => {
 });
 
 app.use(serveStatic(path.join(__dirname, "public")));
-//Sets our app to use the handlebars engine
+
 app.engine(
   ".hbs",
   handlebars({
@@ -158,9 +149,6 @@ app
   .get(middlewares.authenticate, playlistsController.addSongPage);
 
 app.post("/add-song", upload.single("song"), playlistsController.addSong);
-app.post("/add-song", (req, res) => {
-  return res.json(req.body);
-});
 
 // app.post("/add-song/", upload.single("song"), playlistsController.addSong);
 app.get("/delete-song/:songId", (req, res) => {
@@ -173,13 +161,23 @@ app.get("/delete-song/:songId", (req, res) => {
     });
 });
 
-/* Accounts routes */
-app.get("/accounts", middlewares.authenticate, userController.accountPage);
-app.get("/account/:userId", middlewares.authenticate, userController.userPage);
-app.get("/about", middlewares.authenticate, userController.aboutPage);
-app.get("/contact", middlewares.authenticate, userController.contactPage);
+app
+  .route("/api/user/playlists")
+  .get(jsonParser, middlewares.authenticate, usersApiController.userPlaylists);
 
 app.route("/api/login").post(jsonParser, usersApiController.login);
+app.route("/api/logout").post(jsonParser, usersApiController.logout);
+app.route("/api/register").post(jsonParser, usersApiController.register);
+app
+  .route("/api/user")
+  .get(jsonParser, middlewares.authenticate, usersApiController.userInfo);
+app
+  .route("/api/show")
+  .get(
+    jsonParser,
+    middlewares.authenticate,
+    usersApiController.basicAccountInfo
+  );
 
 app.use(middlewares.notFound);
 app.listen(app.get("port"), () =>
