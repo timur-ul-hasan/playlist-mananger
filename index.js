@@ -14,20 +14,20 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 require("./setup.js");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 const sqliteOptions = {
   client: "sqlite3",
   connection: {
-    filename: "./dev.sqlite3"
+    filename: "./dev.sqlite3",
   },
-  useNullAsDefault: true
+  useNullAsDefault: true,
 };
 const knex = require("knex")(sqliteOptions);
 
 const KnexSessionStore = require("connect-session-knex")(session);
 const store = new KnexSessionStore({
-  knex
+  knex,
 });
 
 app.locals.knex = knex;
@@ -44,9 +44,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 1000 * 60 * 60 * 24 * 7
+      expires: 1000 * 60 * 60 * 24 * 7,
     },
-    store
+    store,
   })
 );
 
@@ -56,10 +56,10 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 const upload = multer({
-  storage: storage
+  storage: storage,
   // fileFilter: (req, file, cb) => {
   //   console.log(file.mimetype);
   //   if (file.mimetype == "audio/mp3") {
@@ -91,7 +91,7 @@ app.engine(
     layoutsDir: `${__dirname}/components`,
     extname: ".hbs",
     defaultLayout: "layout",
-    partialsDir: `${__dirname}/components/partials`
+    partialsDir: `${__dirname}/components/partials`,
   })
 );
 app.set("view engine", ".hbs"); //Sets handlebars configurations (we will go through them later on)
